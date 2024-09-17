@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->string('img');
+            $table->string('img_url');
             $table->text('message');
             $table->timestamps();
         });

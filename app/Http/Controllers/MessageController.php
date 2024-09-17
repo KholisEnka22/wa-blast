@@ -10,26 +10,18 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $rules =[
-            'img' => 'required|mimes:jpeg,png,jpg,gif,svg|max:5000',
+            'img_url' => 'required',
             'message' => 'required'
         ];
         $message = [
-            'img.required' => 'Image tidak boleh kosong',  
-            'img.mimes' => 'File harus bertipe jpeg,png,jpg,gif,svg',
-            'img.max' => 'Ukuran file terlalu besar',
+            'img_url.required' => 'Image Url tidak boleh kosong',
             'message.required' => 'Message tidak boleh kosong'
         ];
 
         $this->validate($request, $rules, $message);
 
-        //uplod img
-        $file = $request->file('img');
-        $extension = $file->getClientOriginalExtension();
-        $filename = time() . '.' . $extension;
-        $file->move(public_path('img'), $filename);
-
         Message::create([
-            'img' => $filename,
+            'img_url' => $request->img_url,
             'message' => $request->message
         ]);
         return redirect()->route('inbox.index')->with('message.type', 'success')

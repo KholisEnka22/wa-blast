@@ -24,3 +24,5 @@ Route::get('/number',[NumberController::class, 'index'])->name('number.index');
 Route::get('/inbox',[InboxController::class, 'index'])->name('inbox.index');
 Route::post('/store/number',[NumberController::class, 'store'])->name('number.store');
 Route::post('/store/message',[MessageController::class, 'store'])->name('message.store');
+
+Route::get('/execute-curl',[NumberController::class, 'executeCurl'])->name('execute-curl');

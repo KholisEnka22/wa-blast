@@ -73,8 +73,8 @@
                         @csrf
                         <div class="row g-2">
                             <div class="col mb-0">
-                                <label for="add">Upload Gambar</label>
-                                <input type="file" name="img" class="form-control">
+                                <label for="add">Url Gambar</label>
+                                <input type="text" name="img_url" class="form-control">
                             </div>
                         </div>
                         <div class="row g-2">

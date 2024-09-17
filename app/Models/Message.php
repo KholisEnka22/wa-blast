@@ -10,7 +10,7 @@ class Message extends Model
     use HasFactory;
 
     protected $fillable = [
-        'img',
+        'img_url',
         'message'
     ];
 

@@ -38,6 +38,7 @@
                     <tr>
                         <th>Id</th>
                         <th>No.Wa</th>
+                        <th>Gambar</th>
                         <th>Pesan</th>
                         <th>Tanggal</th>
                         <th>Status</th>
@@ -48,6 +49,8 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->number }}</td>
+                            <td><img src="{{ $item->message->img_url }}" alt="Gambar Pesan"
+                                    style="max-width: 60px; height: auto;"></td>
                             <td>{{ \Illuminate\Support\Str::limit(strip_tags($item->message->message), 25, '...') }}</td>
 
                             <td>{{ $item->created_at }}</td>
@@ -136,6 +139,20 @@
             var tooltip = new bootstrap.Tooltip(this); // Aktifkan tooltip manual
             var modal = new bootstrap.Modal(document.getElementById('basicModal')); // Aktifkan modal manual
             modal.show();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/execute-curl')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log('cURL executed successfully');
+                    } else {
+                        console.error('cURL execution failed');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     </script>
 @endsection
