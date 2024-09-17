@@ -91,7 +91,7 @@
                     <li class="menu-item">
                         <a href="{{ route('number.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxl-whatsapp"></i>
-                            <div data-i18n="Whatsapp">No Whatsapp</div>
+                            <div data-i18n="Whatsapp">Blast Message</div>
                         </a>
                     </li>
                     <li class="menu-item">
@@ -158,8 +158,8 @@
                                 <script>
                                     document.write(new Date().getFullYear());
                                 </script>
-                                , made with ❤️ by
-                                <a href="#" target="_blank" class="footer-link fw-bolder">Satria Agung</a>
+                                , made with by
+                                <a href="#" target="_blank" class="footer-link fw-bolder">CloudSide Official</a>
                             </div>
                         </div>
                     </footer>

@@ -21,12 +21,12 @@
 
 <div class="card" style="padding: 10px">
     <h5 class="card-header">Daftar No Whatsapp</h5>
-    <div class="d-flex justify-content-end mb-3 mr-10">
-        <form>
+    <div class="d-flex justify-content-center mb-3">
+        <form class="w-50">
             <input type="text" id="search" class="form-control" placeholder="Search..." autocomplete="off">
         </form>
-        <button id="myButton" class="btn btn-icon btn-primary float-end ms-2 me-2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right" data-bs-html="true" title="<span>Tambah No Whatsapp</span>">
-            <span class="tf-icons bx bxl-whatsapp"></span>
+        <button id="myButton" class="btn btn-icon btn-primary ms-2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right" data-bs-html="true" title="<span>Tambah No Whatsapp</span>">
+            <span class="tf-icons bx bx-paper-plane"></span>
         </button>
     </div>
 

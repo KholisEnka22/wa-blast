@@ -20,42 +20,29 @@
 @endif
 
 <div class="card" style="padding: 10px">
-    <h5 class="card-header">Daftar Inbox</h5>
-    <div class="d-flex justify-content-end mb-3 mr-10">
-        <form>
-            <input type="text" id="search" class="form-control" placeholder="Search..." autocomplete="off">
-        </form>
-        <button id="myButton" class="btn btn-icon btn-primary float-end ms-2 me-2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right" data-bs-html="true" title="<span>Tambah Template Pesan</span>">
-            <span class="tf-icons bx bx-plus-medical"></span>
-        </button>
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="card-header">Daftar Inbox</h5>
+        <input type="text" id="searchInput" class="form-control" placeholder="Cari pesan..." style="max-width: 300px; margin-right: 10px;">
+        <div id="totalMessages"></div>
     </div>
 
+
     <div class="table-responsive text-nowrap">
-        <table class="table table-hover" id="data-table">
+        <table class="table table-hover" id="messagesTable">
             <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>No.Wa</th>
-                    <th>Inbox</th>
-                    <th>Tanggal</th>
-                    <th>Aksi</th>
+                    <th>From</th>
+                    <th>Message</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
-            <tbody class="table-border-bottom-0">
-                {{-- @foreach ($murid as $m) --}}
-                <tr>
-                    <td>1</td>
-                    <td>085731028605</td>
-                    <td>Halo</td>
-                    <td>12-02-2025</td>
-                    <td>Balas</td>
-                </tr>
-                {{-- @endforeach --}}
+            <tbody>
+                <!-- Data will be inserted here -->
             </tbody>
         </table>
+
     </div>
 </div>
-<!--/ Hoverable Table rows -->
 
 <!-- Modal -->
 <div class="modal fade" id="basicModal" tabindex="-1" aria-labelledby="basicModalLabel" aria-hidden="true">
@@ -91,33 +78,119 @@
         </div>
     </div>
 </div>
-{{-- End Modal --}}
 @endsection
 
 @section('footer')
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script>
-    $(document).ready(function() {
-        var message = @json(session('message'));
+    const messagesApiUrl = 'https://wa-server-19d35-default-rtdb.asia-southeast1.firebasedatabase.app/received.json';
+    const countApiUrl = 'https://wa-server-19d35-default-rtdb.asia-southeast1.firebasedatabase.app/message_counts.json';
+    const deleteApiUrl = 'https://wa-server-19d35-default-rtdb.asia-southeast1.firebasedatabase.app/received/';
 
-        if (typeof message === 'object' && message !== null) {
-            var messageType = message.type;
-            var messageContent = message.content;
+    function showNotification(message, type) {
+        const notificationDiv = document.getElementById('notification');
+        notificationDiv.textContent = message;
+        notificationDiv.className = `alert alert-${type}`;
+        notificationDiv.style.display = 'block';
+    }
 
-            if (messageType === 'success' || messageType === 'danger') {
-                $('#modalMessageToast .fw-semibold').text(messageType.charAt(0).toUpperCase() + messageType
-                    .slice(1));
-                $('#modalMessageToast .toast-body').text(messageContent);
+    async function deleteMessage(messageId) {
+        try {
+            const response = await fetch(`${deleteApiUrl}${messageId}.json`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                throw new Error('Failed to delete message');
+            }
+            loadData();
+            showNotification('Message deleted successfully!', 'success');
+        } catch (error) {
+            showNotification('Error deleting message: ' + error.message, 'danger');
+        }
+    }
 
-                $('#modalMessageToast').toast('show');
+    function filterMessages() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const tableBody = document.querySelector('#messagesTable tbody');
+        const rows = tableBody.getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const fromColumn = rows[i].getElementsByTagName('td')[0];
+            const messageColumn = rows[i].getElementsByTagName('td')[1];
+            const fromText = fromColumn.textContent.toLowerCase();
+            const messageText = messageColumn.textContent.toLowerCase();
+
+            if (fromText.includes(searchInput) || messageText.includes(searchInput)) {
+                rows[i].style.display = '';
+            } else {
+                rows[i].style.display = 'none';
             }
         }
-    });
-</script>
-<script>
-    document.getElementById('myButton').addEventListener('click', function() {
-        var tooltip = new bootstrap.Tooltip(this); // Aktifkan tooltip manual
-        var modal = new bootstrap.Modal(document.getElementById('basicModal')); // Aktifkan modal manual
-        modal.show();
-    });
+    }
+
+    async function loadData() {
+        try {
+            const responseMessages = await fetch(messagesApiUrl);
+            const messagesData = await responseMessages.json();
+
+            const responseCount = await fetch(countApiUrl);
+            const countData = await responseCount.json();
+
+            const tableBody = document.querySelector('#messagesTable tbody');
+            const totalMessagesDiv = document.getElementById('totalMessages');
+            tableBody.innerHTML = '';
+
+            const messagesArray = Object.entries(messagesData).reverse();
+            let totalMessages = 0;
+
+            for (const [key, messageObj] of messagesArray) {
+                const {
+                    from,
+                    message
+                } = messageObj;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${from}</td>
+                    <td>${message}</td>
+                    <td><button class="btn btn-success" onclick="deleteMessage('${key}')">Delete</button></td>
+                `;
+                tableBody.appendChild(row);
+                totalMessages++;
+            }
+
+            let totalCount = 0;
+            for (const key in countData) {
+                if (countData.hasOwnProperty(key)) {
+                    totalCount += countData[key].count;
+                }
+            }
+
+            totalMessagesDiv.textContent = `Total Inbox: ${totalMessages} Pesan terkirim Sukses: ${totalCount}`;
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    function handleStatus() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status');
+
+        if (status === 'sukses') {
+            showNotification('Operasi berhasil! Pesan terkirim dan dihitung.', 'success');
+        } else if (status === 'gagal') {
+            showNotification('Operasi gagal. Mohon coba lagi.', 'danger');
+        } else if (status === 'error') {
+            showNotification('Parameter tidak lengkap. Mohon coba lagi.', 'warning');
+        }
+    }
+
+    window.onload = function() {
+        loadData();
+        handleStatus();
+        document.getElementById('searchInput').addEventListener('keyup', filterMessages);
+    };
 </script>
 @endsection
