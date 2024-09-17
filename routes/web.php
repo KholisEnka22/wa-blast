@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InboxController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NumberController;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::get('/number',[NumberController::class, 'index'])->name('number.index');
 Route::get('/inbox',[InboxController::class, 'index'])->name('inbox.index');
