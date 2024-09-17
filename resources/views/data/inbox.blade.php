@@ -23,7 +23,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h5 class="card-header">Daftar Inbox</h5>
         <input type="text" id="searchInput" class="form-control" placeholder="Cari pesan..." style="max-width: 300px; margin-right: 10px;">
-        <div id="totalMessages"></div>
+        <div style="margin-left: -40px" id="totalMessages"></div>
     </div>
 
 

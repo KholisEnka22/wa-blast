@@ -25,7 +25,7 @@
         <form class="w-50">
             <input type="text" id="search" class="form-control" placeholder="Search..." autocomplete="off">
         </form>
-        <button id="myButton" class="btn btn-icon btn-primary ms-2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right" data-bs-html="true" title="<span>Tambah No Whatsapp</span>">
+        <button id="myButton" class="btn btn-icon btn-primary ms-2" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right" data-bs-html="true" title="<span>Kirim Pesan Massal</span>">
             <span class="tf-icons bx bx-paper-plane"></span>
         </button>
     </div>
@@ -79,10 +79,7 @@
                     <div class="row g-2">
                         <div class="col mb-0">
                             <label for="add">Tambah Nomor</label>
-                            <textarea name="numbers" class="form-control">
-628....
-628....
-                                </textarea>
+                            <textarea name="numbers" class="form-control" placeholder="628....&#10;628....&#10;..."></textarea>
                         </div>
                     </div>
                     <div class="row g-2">
