@@ -407,11 +407,13 @@
                 }
 
                 // Tampilkan semua pesan yang diterima
-                filteredMessages.forEach(([key, messageObj]) => {
+                filteredMessages.forEach(([key, messageObj], index, array) => {
                     const message = messageObj.message;
-                    const sessionKey = filteredMessages[0][1].session;
-                    console.info(sessionKey);
-                    document.getElementById('sessionInput').value = sessionKey;
+                    if (index === array.length - 1) {
+                        const sessionKey = messageObj.session;
+                        console.info(sessionKey);
+                        document.getElementById('sessionInput').value = sessionKey;
+                    }
                     document.getElementById('fromInput').value = from;
                     const receivedMessage = document.createElement('div');
                     receivedMessage.classList.add('chat-message', 'mb-2');
