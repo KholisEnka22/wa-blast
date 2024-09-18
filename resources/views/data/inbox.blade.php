@@ -128,7 +128,7 @@
     <div class="message-input d-flex align-items-center">
         <input type="hidden" id="sessionInput" value="session_id_value"> <!-- Set session ID value dynamically -->
         <input type="hidden" id="fromInput" value="from_value"> <!-- Set from value dynamically -->
-        <input id="replyInput" type="text" class="form-control me-2" placeholder="Tulis pesan di sini">
+        <input id="replyInput" type="text" class="form-control me-2" placeholder="Tulis pesan di sini" onkeydown="if (event.keyCode == 13) document.getElementById('sendReply').click()">
         <button id="sendReply" type="button" class="btn btn-primary">
             <i class="bx bx-send"></i>
         </button>
@@ -348,6 +348,8 @@
         }
 
         // Contoh URL untuk mengirim data, sesuaikan dengan API Anda
+        // iki rencana e gawe api curl biar bisa input ke database juga
+
         const replyApiUrl = 'https://example.com/api/send-reply';
 
         // Kirim data ke server
