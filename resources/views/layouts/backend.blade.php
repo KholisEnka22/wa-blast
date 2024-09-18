@@ -12,6 +12,7 @@
 
     <meta name="description" content="" />
 
+    @yield('top')
 
     <!-- Summernote -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -107,12 +108,6 @@
                         <a href="{{ route('inbox.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-message-rounded-dots"></i>
                             <div data-i18n="Whatsapp">Inbox</div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-book"></i>
-                            <div data-i18n="Report">Report</div>
                         </a>
                     </li>
                 </ul>

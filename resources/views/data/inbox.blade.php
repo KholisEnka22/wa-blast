@@ -1,5 +1,68 @@
 @extends('layouts.backend')
 
+@section('top')
+    <style>
+        .chat-container {
+            max-height: 70vh;
+        }
+
+        .chat-message {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-bubble {
+            background-color: #e1ffc7;
+            border-radius: 15px;
+            padding: 10px;
+            max-width: 80%;
+        }
+
+        .received-message {
+            background-color: #f1f1f1;
+        }
+
+        .sent-message {
+            background-color: #daf8cb;
+            align-self: flex-end;
+            /* Align pesan yang dikirim ke kanan */
+        }
+
+        .message-input {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+        .avatar-initial {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-container::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .btn-primary i {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        /* Tambahkan margin kiri antara waktu dan nomor */
+        .chat-bubble .text-muted {
+            margin-left: auto;
+        }
+    </style>
+@endsection
+
 @section('content')
     <!-- Elemen untuk menampilkan pesan toast, awalnya tersembunyi -->
 
@@ -42,8 +105,49 @@
                 </thead>
                 <tbody>
                     <!-- Data will be inserted here -->
+
                 </tbody>
             </table>
+        </div>
+    </div>
+
+
+    <!-- offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasEndLabel" class="offcanvas-title">Balas Pesan</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column justify-content-between">
+            <!-- Chat List -->
+            <div class="chat-container flex-grow-1 mb-3">
+                <!-- Pesan dari Pengirim -->
+                <div class="chat-message">
+                    <div class="d-flex mb-2">
+                        <div class="avatar flex-shrink-0 me-2">
+                            <span class="avatar-initial rounded-circle bg-label-primary"><i class="bx bx-user"></i></span>
+                        </div>
+                        <div class="chat-bubble received-message">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">6285731028605</h6>
+                                <small class="text-muted ms-3">12:45</small>
+                            </div>
+                            <p class="mb-0 text-muted">Oke bang</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tempat untuk menampilkan balasan -->
+                <div id="replyMessages"></div> <!-- Balasan pesan ditampilkan di sini -->
+            </div>
+        </div>
+
+        <!-- Message Input -->
+        <div class="message-input d-flex align-items-center">
+            <input id="replyInput" type="text" class="form-control me-2" placeholder="Tulis pesan di sini">
+            <button id="sendReply" type="button" class="btn btn-primary">
+                <i class="bx bx-send"></i>
+            </button>
         </div>
     </div>
 
@@ -163,11 +267,11 @@
                     <td>${from}</td>
                     <td>${limitText(message, 30)}</td>
                     <td>
-                        <a href="#" class="text-warning ms-3" onclick="replyMessage('${key}', '${from}')" title="Balas Pesan">
-                            <i class="bx bx-message-rounded-edit"></i>
-                        </a>
                         <a href="#" class="text-danger" onclick="deleteMessage('${key}')" title="Hapus Pesan">
                             <i class="bx bx-trash"></i>
+                            </a>
+                        <a href="#" class="text-primary ms-3" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd" onclick="replyMessage('${key}', '${from}')" title="Balas Pesan">
+                            <i class="bx bx-message-rounded-edit"></i>
                         </a>
                     </td>
                 `;
@@ -218,5 +322,43 @@
             handleStatus();
             document.getElementById('searchInput').addEventListener('keyup', filterMessages);
         };
+    </script>
+
+    <script>
+        // Fungsi untuk menambahkan balasan ke dalam tampilan
+        document.getElementById('sendReply').addEventListener('click', function() {
+            const replyInput = document.getElementById('replyInput');
+            const replyMessages = document.getElementById('replyMessages');
+            const messageText = replyInput.value;
+
+            if (messageText.trim() !== '') {
+                // Membuat elemen balasan
+                const replyBubble = document.createElement('div');
+                replyBubble.classList.add('chat-message', 'd-flex', 'mb-2');
+
+                replyBubble.innerHTML = `
+                <div class="d-flex flex-grow-1 justify-content-end">
+                    <div class="chat-bubble sent-message me-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">You</h6>
+                            <small class="text-muted ms-3">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                        </div>
+                        <p class="mb-0 text-muted">${messageText}</p>
+                    </div>
+                    <div class="avatar flex-shrink-0">
+                        <span class="avatar-initial rounded-circle bg-label-primary">
+                            <i class="bx bx-user"></i>
+                        </span>
+                    </div>
+                </div>
+            `;
+
+                // Menambahkan balasan ke dalam list
+                replyMessages.appendChild(replyBubble);
+
+                // Mengosongkan input setelah pesan terkirim
+                replyInput.value = '';
+            }
+        });
     </script>
 @endsection
