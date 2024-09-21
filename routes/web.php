@@ -25,8 +25,9 @@ Route::get('/', function () {
 Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::get('/number',[NumberController::class, 'index'])->name('number.index');
-Route::get('/inbox',[InboxController::class, 'index'])->name('inbox.index');
 Route::post('/store/number',[NumberController::class, 'store'])->name('number.store');
+
+Route::get('/inbox',[InboxController::class, 'index'])->name('inbox.index');
 Route::post('/store/message',[MessageController::class, 'store'])->name('message.store');
 
 Route::get('/reply-chat', [ReplyChatController::class, 'store'])->name('reply-chat.store');
