@@ -299,11 +299,11 @@
             <div class="message-summary">
                 <button class="btn btn-primary">
                     Total Inbox
-                    <span class="badge bg-white text-primary rounded-pill">${totalMessages}</span>
+                    <span class="badge bg-white text-primary">${totalMessages}</span>
                 </button>
                 <button class="btn btn-primary">
                     Total Pesan Terkirim
-                    <span class="badge bg-white text-primary rounded-pill">${totalSentMessages}</span>
+                    <span class="badge bg-white text-primary">${totalSentMessages}</span>
                 </button>
             </div>
         `;
