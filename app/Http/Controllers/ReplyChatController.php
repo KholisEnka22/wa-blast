@@ -28,6 +28,7 @@ class ReplyChatController extends Controller
 
     public function store(Request $request)
     {
+
         $rules = [
             'session_id' => 'required',
             'pesan' => 'required',
@@ -39,6 +40,28 @@ class ReplyChatController extends Controller
             'pesan.required' => 'Pesan tidak boleh kosong',
             'from.required' => 'From tidak boleh kosong'
         ];
+
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'http://147.139.201.32:60000/send-message');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+            'to' => $request->from,
+            'text' => $request->pesan,
+            'sessionId' => $request->session_id,
+        ]));
+
+        $headers = array();
+        $headers[] = 'Accept: */*';
+        $headers[] = 'User-Agent: Thunder Client (https://www.thunderclient.com)';
+        $headers[] = 'Content-Type: application/json';
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $result = curl_exec($ch);
+        $err = curl_errno($ch);
+        curl_close($ch);
 
         $this->validate($request, $rules, $message);
 
