@@ -56,7 +56,13 @@
                     <td>{{ $item->created_at }}</td>
                     <td>
                         <span class="badge {{ $item->status == 'terkirim' ? 'bg-label-success' : 'bg-label-danger' }}">
-                            {{ $item->status == 'terkirim' ? 'Terkirim' : 'Belum Terkirim' }}
+                            @if ($item->status == 'terkirim')
+                            Terkirim
+                            @elseif ($item->status == 'belum terkirim')
+                            Belum Terkirim
+                            @else
+                            Number not registered
+                            @endif
                         </span>
                     </td>
 

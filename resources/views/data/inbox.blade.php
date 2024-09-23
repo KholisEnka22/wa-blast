@@ -172,6 +172,7 @@
 @endsection
 
 @section('footer')
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -328,9 +329,7 @@
         handleStatus();
         document.getElementById('searchInput').addEventListener('keyup', filterMessages);
     };
-</script>
 
-<script>
     let messagesData = {}; // Placeholder for messages
 
     // Function to show and sort messages based on timestamp
@@ -366,6 +365,7 @@
     // Add event listener to the send button
     // Mendapatkan elemen tombol kirim dan menambahkan event listener
     document.getElementById('sendReply').addEventListener('click', function() {
+        loadData();
         // Mengambil nilai dari input balasan
         const replyInput = document.getElementById('replyInput').value;
         const sessionId = document.getElementById('sessionInput').value; // Mengambil session ID
@@ -541,5 +541,6 @@
                 showNotification('Error fetching messages: ' + error.message, 'danger');
             });
     }
+    setInterval(loadData, 3000);
 </script>
 @endsection
