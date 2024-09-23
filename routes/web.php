@@ -22,15 +22,15 @@ Route::get('/', function () {
     return redirect('/dashboard');
 });
 
-Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard.index');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
-Route::get('/number',[NumberController::class, 'index'])->name('number.index');
-Route::post('/store/number',[NumberController::class, 'store'])->name('number.store');
+Route::get('/number', [NumberController::class, 'index'])->name('number.index');
+Route::post('/store/number', [NumberController::class, 'store'])->name('number.store');
 
-Route::get('/inbox',[InboxController::class, 'index'])->name('inbox.index');
-Route::post('/store/message',[MessageController::class, 'store'])->name('message.store');
+Route::get('/inbox', [InboxController::class, 'index'])->name('inbox.index');
+Route::post('/store/message', [MessageController::class, 'store'])->name('message.store');
 
 Route::get('/reply-chat', [ReplyChatController::class, 'store'])->name('reply-chat.store');
 Route::get('/reply-chat/{from}', [ReplyChatController::class, 'detail'])->name('reply-chat.detail');
 
-Route::get('/execute-curl',[NumberController::class, 'executeCurl'])->name('execute-curl');
+Route::get('/execute-curl', [NumberController::class, 'executeCurl'])->name('execute-curl');
