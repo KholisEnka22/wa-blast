@@ -9,23 +9,28 @@ class MessageController extends Controller
 {
     public function store(Request $request)
     {
-        $rules =[
-            'img_url' => 'required',
+        // Validasi input
+        $rules = [
+            'img_url' => 'required|url',
             'message' => 'required'
         ];
-        $message = [
+        $messages = [
             'img_url.required' => 'Image Url tidak boleh kosong',
+            'img_url.url' => 'Image Url harus berupa URL yang valid',
             'message.required' => 'Message tidak boleh kosong'
         ];
 
-        $this->validate($request, $rules, $message);
+        $this->validate($request, $rules, $messages);
 
+        // Simpan data ke dalam database
         Message::create([
-            'img_url' => $request->img_url,
+            'img' => $request->img_url,
             'message' => $request->message
         ]);
-        return redirect()->route('inbox.index')->with('message.type', 'success')
-                                            ->with('message.content', 'Data berhasil ditambah.');
 
+        // Redirect ke halaman inbox dengan pesan sukses
+        return redirect()->route('number.index')
+            ->with('message.type', 'success')
+            ->with('message.content', 'Data berhasil ditambah.');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,13 +10,5 @@ class Message extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'img_url',
-        'message'
-    ];
-
-    public function number()
-    {
-        return $this->belongsTo(Number::class);
-    }
+    protected $fillable = ['img', 'message'];
 }
