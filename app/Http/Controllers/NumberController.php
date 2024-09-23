@@ -39,7 +39,7 @@ class NumberController extends Controller
             $number = trim($number);  // Trim setiap nomor
 
             // Simpan hanya jika nomor tidak kosong
-            if (!empty($number) && !DB::table('numbers')->where('number', $number)->exists()) {
+            if (!empty($number)) {
                 Number::create([
                     'number' => $number,
                     'message_id' => $message,
@@ -84,9 +84,12 @@ class NumberController extends Controller
             $err = curl_errno($ch);
             curl_close($ch);
 
-            if ($err) {
+            echo "Result: " . $result . "\n"; // Print result
+
+            $response = json_decode($result, true);
+            if (isset($response['error']) && $response['error'] === 'Failed to send message') {
                 // Log error atau tangani sesuai kebutuhan
-                Log::error('cURL Error #: ' . $err);
+                Log::error('cURL Error #: ' . $response['error']);
                 DB::table('numbers')
                     ->where('id',  $item->id)
                     ->update(['status' => 'Number not registered']);
