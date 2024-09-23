@@ -86,6 +86,7 @@ class NumberController extends Controller
 
             echo "Result: " . $result . "\n"; // Print result
 
+
             $response = json_decode($result, true);
             if (isset($response['error']) && $response['error'] === 'Failed to send message') {
                 // Log error atau tangani sesuai kebutuhan
