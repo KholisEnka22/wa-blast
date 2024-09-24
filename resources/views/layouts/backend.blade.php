@@ -109,7 +109,7 @@
                     </li>
                     <li class="menu-item {{ request()->is('inbox*') ? 'active' : '' }}">
                         <a href="{{ route('inbox.index') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-message-rounded-dots"></i>
+                            <i class="menu-icon tf-icons bx bx-target-lock"></i>
                             <div data-i18n="Whatsapp">Auto Reply</div>
                         </a>
                     </li>

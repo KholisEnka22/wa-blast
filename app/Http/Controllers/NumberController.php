@@ -84,8 +84,8 @@ class NumberController extends Controller
             $err = curl_errno($ch);
             curl_close($ch);
 
-            echo "Result: " . $result . "\n"; // Print result
-
+            // echo "Result: " . $result . "\n"; // Print result
+            // jika pengiriman gagal maka dianggap nomor tidak valid 
 
             $response = json_decode($result, true);
             if (isset($response['error']) && $response['error'] === 'Failed to send message') {
@@ -94,12 +94,20 @@ class NumberController extends Controller
                 DB::table('numbers')
                     ->where('id',  $item->id)
                     ->update(['status' => 'Number not registered']);
-            } else {
+                // jika repon dari api server "Message sent with session" maka nomro valid dan sudah terkirim
+            } else if (isset($response['message']) && preg_match('/Message sent with session/', $response['message'])) {
                 // Log atau tangani response sesuai kebutuhan
                 Log::info('cURL Response: ' . $result);
                 DB::table('numbers')
                     ->where('id',  $item->id)
                     ->update(['status' => 'terkirim']);
+                // jika respon ga ada maka session habis dan menjadi status belum di kirim
+            } else {
+                // Log atau tangani response sesuai kebutuhan
+                Log::info('cURL Response: ' . $result);
+                DB::table('numbers')
+                    ->where('id',  $item->id)
+                    ->update(['status' => 'belum terkirim']);
             }
         }
 
