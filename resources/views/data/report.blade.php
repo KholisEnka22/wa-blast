@@ -35,14 +35,31 @@
                     <table id="reportTable" class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Tanggal Awal</th>
-                                <th>Tanggal Akhir</th>
-                                <th>Pesan Terkirim</th>
-                                <th>Pesan Di Terima</th>
-                                <th>Cetak Laporan</th>
+                                <th>Tanggal Start</th>
+                                <th>Tanggal End</th>
+                                <th>Total Pesan Terkirim</th>
+                                <th>Total Pesan DIterima</th>
+                                <th>Cetak</th>
                             </tr>
                         </thead>
                         <tbody id="reportTableBody">
+                            @if ($countSent > 0)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($startDate)->format('d M Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</td>
+                                <td>{{ $countSent }}</td>
+                                <td>{{ $countSend }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" onclick="window.open(`{{ url('report/pdf', [$startDate, $endDate]) }}`, '_blank')">
+                                        <i class="bx bx-printer"></i> Cetak
+                                    </button>
+                                </td>
+                            </tr>
+                            @else
+                            <tr>
+                                <td colspan="3" class="text-center">Tidak ada data yang ditemukan</td>
+                            </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>
@@ -57,59 +74,16 @@
             var startDate = $('#startDate').val();
             var endDate = $('#endDate').val();
 
+            // Validasi jika tanggal mulai lebih besar dari tanggal akhir
+            if (new Date(startDate) > new Date(endDate)) {
+                alert('Tanggal mulai tidak boleh lebih besar dari tanggal akhir');
+                return;
+            }
+
             if (startDate && endDate) {
-                $.ajax({
-                    type: "GET",
-                    url: "",
-                    data: {
-                        startDate: startDate,
-                        endDate: endDate
-                    },
-                    success: function(data) {
-                        $('#reportTableBody').empty();
-                        if (data.length > 0) {
-                            $.each(data, function(index, item) {
-                                $('#reportTableBody').append('<tr>' +
-                                    '<td>' + item.date + '</td>' +
-                                    '<td>' + item.sent + '</td>' +
-                                    '<td>' + item.received + '</td>' +
-                                    '<td>' + item.not_sent + '</td>' +
-                                    '<td>' + item.processing + '</td>' +
-                                    '</tr>');
-                            });
-                        } else {
-                            $('#reportTableBody').append('<tr>' +
-                                '<td colspan="5" class="text-center">Tidak ada data yang ditemukan</td>' +
-                                '</tr>');
-                        }
-                    }
-                });
+                window.location.href = "{{ url('/report') }}" + "?startDate=" + startDate + "&endDate=" + endDate;
             } else {
                 alert('Tanggal mulai dan tanggal akhir harus diisi');
-            }
-        });
-
-        // ketika halaman di load maka tampilkan semua data
-        $.ajax({
-            type: "GET",
-            url: "",
-            success: function(data) {
-                $('#reportTableBody').empty();
-                if (data.length > 0) {
-                    $.each(data, function(index, item) {
-                        $('#reportTableBody').append('<tr>' +
-                            '<td>' + item.date + '</td>' +
-                            '<td>' + item.sent + '</td>' +
-                            '<td>' + item.received + '</td>' +
-                            '<td>' + item.not_sent + '</td>' +
-                            '<td>' + item.processing + '</td>' +
-                            '</tr>');
-                    });
-                } else {
-                    $('#reportTableBody').append('<tr>' +
-                        '<td colspan="5" class="text-center">Tidak ada data yang ditemukan</td>' +
-                        '</tr>');
-                }
             }
         });
     });
