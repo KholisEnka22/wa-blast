@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
-    data-assets-path="../assets/" data-template="vertical-menu-template-free">
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <title>{{ $title }} | WA Blast</title>
 
@@ -27,26 +25,20 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
 
     <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="{{ asset('template/templateAdmin') }}/assets/vendor/fonts/boxicons.css" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="{{ asset('template/templateAdmin') }}/assets/vendor/css/core.css"
-        class="template-customizer-core-css" />
-    <link rel="stylesheet" href="{{ asset('template/templateAdmin') }}/assets/vendor/css/theme-default.css"
-        class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('template/templateAdmin') }}/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('template/templateAdmin') }}/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{{ asset('template/templateAdmin') }}/assets/css/demo.css" />
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet"
-        href="{{ asset('template/templateAdmin') }}/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="{{ asset('template/templateAdmin') }}/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
-    <link rel="stylesheet"
-        href="{{ asset('template/templateAdmin') }}/assets/vendor/libs/apex-charts/apex-charts.css" />
+    <link rel="stylesheet" href="{{ asset('template/templateAdmin') }}/assets/vendor/libs/apex-charts/apex-charts.css" />
 
     <!-- Page CSS -->
     {{-- <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.css" rel="stylesheet"> --}}
@@ -72,8 +64,7 @@
                 <div class="app-brand demo">
                     <a href="index.html" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="{{ asset('template/templateAdmin') }}/assets/img/sa.png" width="50"
-                                alt="WA Blast">
+                            <img src="{{ asset('template/templateAdmin') }}/assets/img/sa.png" width="50" alt="WA Blast">
                         </span>
                         <span class="app-brand-text demo menu-text fw-bolder ms-2" style="text-transform: capitalize">WA
                             Blast</span>
@@ -110,6 +101,12 @@
                             <div data-i18n="Whatsapp">Inbox</div>
                         </a>
                     </li>
+                    <li class="menu-item {{ request()->is('inbox*') ? 'active' : '' }}">
+                        <a href="{{ route('inbox.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-message-rounded-dots"></i>
+                            <div data-i18n="Whatsapp">Auto Reply</div>
+                        </a>
+                    </li>
                 </ul>
             </aside>
             <!-- / Menu -->
@@ -118,17 +115,14 @@
             <div class="layout-page">
                 <!-- Navbar -->
 
-                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-                    id="layout-navbar">
+                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                         <!-- Search -->
 
                         <!-- /Search -->
-                        <marquee behavior="scroll" direction="left" scrollamount="3" scrolldelay="5"
-                            onmouseover="this.stop()" onmouseout="this.start()">
+                        <marquee behavior="scroll" direction="left" scrollamount="3" scrolldelay="5" onmouseover="this.stop()" onmouseout="this.start()">
                             Hubungi kami untuk jasa layanan whatsapp blast, promo whatsapp blast, WA blast, whatsapp
-                            marketing, whatsapp automation, dan jasa whatsapp lainnya. <a
-                                href="https://wa.me/6281554850403" target="_blank">Klik disini</a> untuk menghubungi
+                            marketing, whatsapp automation, dan jasa whatsapp lainnya. <a href="https://wa.me/6281554850403" target="_blank">Klik disini</a> untuk menghubungi
                             kami.
                         </marquee>
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
@@ -161,8 +155,7 @@
 
                     <!-- Footer -->
                     <footer class="content-footer footer bg-footer-theme">
-                        <div
-                            class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                        <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                             <div class="mb-2 mb-md-0">
                                 ©
                                 <script>
