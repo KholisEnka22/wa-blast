@@ -5,6 +5,7 @@ use App\Http\Controllers\InboxController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NumberController;
 use App\Http\Controllers\ReplyChatController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,5 +33,7 @@ Route::post('/store/message', [MessageController::class, 'store'])->name('messag
 
 Route::get('/reply-chat', [ReplyChatController::class, 'store'])->name('reply-chat.store');
 Route::get('/reply-chat/{from}', [ReplyChatController::class, 'detail'])->name('reply-chat.detail');
+
+Route::get('/report', [ReportController::class, 'index'])->name('report.index');
 
 Route::get('/execute-curl', [NumberController::class, 'executeCurl'])->name('execute-curl');

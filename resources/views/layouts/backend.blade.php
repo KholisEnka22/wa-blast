@@ -92,13 +92,19 @@
                     <li class="menu-item {{ request()->is('number*') ? 'active' : '' }}">
                         <a href="{{ route('number.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxl-whatsapp"></i>
-                            <div data-i18n="Whatsapp">Blast Message</div>
+                            <div data-i18n="Blast Message">Blast Message</div>
                         </a>
                     </li>
                     <li class="menu-item {{ request()->is('inbox*') ? 'active' : '' }}">
                         <a href="{{ route('inbox.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-message-rounded-dots"></i>
-                            <div data-i18n="Whatsapp">Inbox</div>
+                            <div data-i18n="Inbox">Inbox</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ request()->is('report*') ? 'active' : '' }}">
+                        <a href="{{ route('report.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-book"></i>
+                            <div data-i18n="Report">Report</div>
                         </a>
                     </li>
                     <li class="menu-item {{ request()->is('inbox*') ? 'active' : '' }}">

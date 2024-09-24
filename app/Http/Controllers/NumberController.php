@@ -14,7 +14,7 @@ class NumberController extends Controller
     {
         $data = [
             'title' => 'Number',
-            'number' => Number::all(),
+            'number' => Number::paginate(10),
             'message' => Message::all()
         ];
 
