@@ -36,7 +36,7 @@
                     </div>
                     <span class="fw-semibold" style="margin-left: 20px">Pesan Terkirim</span>
                 </div>
-                <h3 class="card-title mb-2 text-center" id="totalSentMessages">100</h3>
+                <h3 class="card-title mb-2 text-center" id="totalSentMessages">0</h3>
             </div>
         </div>
     </div>
@@ -50,7 +50,7 @@
                     </div>
                     <span class="fw-semibold">Pesan Di Terima</span>
                 </div>
-                <h3 class="card-title mb-2 text-center" id="totalMessages">50</h3>
+                <h3 class="card-title mb-2 text-center" id="totalMessages">0</h3>
             </div>
         </div>
     </div>

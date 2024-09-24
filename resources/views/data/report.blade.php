@@ -57,7 +57,7 @@
                             </tr>
                             @else
                             <tr>
-                                <td colspan="3" class="text-center">Tidak ada data yang ditemukan</td>
+                                <td colspan="5" class="text-center">Tidak ada data yang ditemukan</td>
                             </tr>
                             @endif
                         </tbody>
