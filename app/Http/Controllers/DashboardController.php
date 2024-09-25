@@ -8,10 +8,10 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $data = [
+        return view('dashboard', [
             'title' => 'Dashboard',
-        ];
-
-        return view('dashboard', $data);
+            'jumlah_number_not_registered' => \App\Models\Number::whereStatus('Number not registered')->count(),
+            'pandding' => \App\Models\Number::whereStatus('belum terkirim')->count(),
+        ]);
     }
 }
