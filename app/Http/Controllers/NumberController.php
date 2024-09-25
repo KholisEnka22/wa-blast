@@ -100,14 +100,14 @@ class NumberController extends Controller
                 Log::info('cURL Response: ' . $result);
                 DB::table('numbers')
                     ->where('id',  $item->id)
-                    ->update(['status' => 'terkirim']);
+                    ->update(['status' => 'belum terkirim']);
                 // jika respon ga ada maka session habis dan menjadi status belum di kirim
             } else {
                 // Log atau tangani response sesuai kebutuhan
                 Log::info('cURL Response: ' . $result);
                 DB::table('numbers')
                     ->where('id',  $item->id)
-                    ->update(['status' => 'belum terkirim']);
+                    ->update(['status' => 'terkirim']);
             }
         }
 
