@@ -10,7 +10,7 @@ class DashboardController extends Controller
     {
         return view('dashboard', [
             'title' => 'Dashboard',
-            'jumlah_number_not_registered' => \App\Models\Number::whereStatus('Number not registered')->count(),
+            'jumlah_number_not_registered' => \App\Models\Number::whereStatus('number not registered')->count(),
             'pandding' => \App\Models\Number::whereStatus('belum terkirim')->count(),
         ]);
     }

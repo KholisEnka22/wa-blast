@@ -93,21 +93,21 @@ class NumberController extends Controller
                 Log::error('cURL Error #: ' . $response['error']);
                 DB::table('numbers')
                     ->where('id',  $item->id)
-                    ->update(['status' => 'Number not registered']);
+                    ->update(['status' => 'number not registered']);
                 // jika repon dari api server "Message sent with session" maka nomro valid dan sudah terkirim
             } else if (isset($response['message']) && preg_match('/Message sent with session/', $response['message'])) {
                 // Log atau tangani response sesuai kebutuhan
                 Log::info('cURL Response: ' . $result);
                 DB::table('numbers')
                     ->where('id',  $item->id)
-                    ->update(['status' => 'belum terkirim']);
+                    ->update(['status' => 'terkirim']);
                 // jika respon ga ada maka session habis dan menjadi status belum di kirim
             } else {
                 // Log atau tangani response sesuai kebutuhan
                 Log::info('cURL Response: ' . $result);
                 DB::table('numbers')
                     ->where('id',  $item->id)
-                    ->update(['status' => 'terkirim']);
+                    ->update(['status' => 'belum terkirim']);
             }
         }
 
