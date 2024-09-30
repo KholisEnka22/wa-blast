@@ -128,7 +128,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">Tambah Tahun</h5>
+                    <h5 class="modal-title" id="exampleModalLabel1">Kirim Pesan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -146,7 +146,7 @@
                                 <select name="message_id" id="message_id" class="form-select">
                                     <option selected disabled>Pilih Pesan</option>
                                     @foreach ($message as $item)
-                                        <option value="{{ $item->id }}">{{ $item->message }}</option>
+                                        <option value="{{ $item->id }}">{{ $item->short_message }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -168,7 +168,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">ISI PESAN</h5>
+                    <h5 class="modal-title" id="exampleModalLabel1">Isi Pesan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -177,7 +177,7 @@
 
                         <div class="form-group">
                             <label for="message">Message:</label>
-                            <textarea class="form-control" id="message" name="message" placeholder="Tulis pesan disini" required></textarea>
+                            <textarea id="summernote" name="message" placeholder="Tulis pesan disini" required></textarea>
                         </div>
                         <div class="form-group">
                             <label for="img_url">Image URL:</label>

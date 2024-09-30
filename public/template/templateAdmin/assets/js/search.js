@@ -35,13 +35,18 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!noDataRow) {
                 noDataRow = document.createElement("tr");
                 noDataRow.setAttribute("id", "no-data-row");
-
+        
                 const noDataCell = document.createElement("td");
-                noDataCell.setAttribute("colspan", "5"); // Sesuaikan jumlah kolom
+        
+                // Ambil jumlah kolom dari header tabel secara dinamis
+                const table = document.querySelector("table");  // Ganti dengan selektor tabel yang sesuai
+                const columnCount = table.querySelector("thead tr").children.length; // Menghitung jumlah kolom dari header
+        
+                noDataCell.setAttribute("colspan", columnCount); // Set jumlah kolom secara dinamis
                 noDataCell.textContent = "Tidak ada data";
                 noDataCell.style.textAlign = "center";
                 noDataCell.style.backgroundColor = "#f5f5f9";
-
+        
                 noDataRow.appendChild(noDataCell);
                 tbody.appendChild(noDataRow); // Tampilkan pesan
             }
@@ -51,6 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (noDataRow) {
                 noDataRow.remove();
             }
-        }
+        }        
     });
 });

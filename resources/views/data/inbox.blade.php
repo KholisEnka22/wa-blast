@@ -89,7 +89,7 @@
             <div class="" id="totalMessages"></div>
             <form class="d-flex">
                 <input type="text" id="searchInput" class="form-control" placeholder="Cari pesan..."
-                    style="max-width: 300px;">
+                    style="max-width: 300px;" autocomplete="off">
             </form>
         </div>
 
@@ -210,7 +210,24 @@
             const searchInput = document.getElementById('searchInput').value.toLowerCase();
             const tableBody = document.querySelector('#messagesTable tbody');
             const rows = tableBody.getElementsByTagName('tr');
+            let noDataFound = true; // Flag untuk mengecek apakah ada data yang ditemukan
 
+            // Jika searchInput kosong, tampilkan semua baris dan hapus pesan "Data tidak ada"
+            if (searchInput.trim() === "") {
+                for (let i = 0; i < rows.length; i++) {
+                    rows[i].style.display = ''; // Tampilkan semua baris
+                }
+
+                // Hapus pesan "Data tidak ada" jika ada
+                let noDataRow = document.getElementById("no-data-row");
+                if (noDataRow) {
+                    noDataRow.remove();
+                }
+
+                return; // Keluar dari fungsi jika input kosong
+            }
+
+            // Jika tidak kosong, lanjutkan dengan pencarian
             for (let i = 0; i < rows.length; i++) {
                 const fromColumn = rows[i].getElementsByTagName('td')[0];
                 const messageColumn = rows[i].getElementsByTagName('td')[1];
@@ -219,16 +236,42 @@
 
                 if (fromText.includes(searchInput) || messageText.includes(searchInput)) {
                     rows[i].style.display = '';
+                    noDataFound = false; // Jika ada data yang cocok, ubah flag menjadi false
                 } else {
                     rows[i].style.display = 'none';
                 }
             }
+
+            // Jika tidak ada data yang cocok, tampilkan pesan "Data tidak ada"
+            let noDataRow = document.getElementById("no-data-row");
+            if (noDataFound) {
+                if (!noDataRow) {
+                    noDataRow = document.createElement("tr");
+                    noDataRow.setAttribute("id", "no-data-row");
+
+                    const noDataCell = document.createElement("td");
+
+                    // Menghitung jumlah kolom (colspan) secara dinamis
+                    const table = document.querySelector("table");
+                    const columnCount = table.querySelector("thead tr").children.length;
+
+                    noDataCell.setAttribute("colspan", columnCount); // Set colspan sesuai jumlah kolom
+                    noDataCell.textContent = "Data tidak ada";
+                    noDataCell.style.textAlign = "center";
+                    noDataCell.style.backgroundColor = "#f5f5f9";
+
+                    noDataRow.appendChild(noDataCell);
+                    tableBody.appendChild(noDataRow); // Tampilkan pesan
+                }
+            } else {
+                // Jika ada data yang cocok, hapus pesan "Data tidak ada"
+                if (noDataRow) {
+                    noDataRow.remove();
+                }
+            }
         }
 
-        function limitText(text, limit) {
-            return text.length > limit ? text.substring(0, limit) + '...' : text;
-        }
-
+        // Memuat data dari API
         async function loadData() {
             try {
                 const responseMessages = await fetch(messagesApiUrl);
@@ -259,7 +302,7 @@
                     }
                     groupedMessages[from].count += 1;
                     groupedMessages[from].keys.push(
-                        key); // Store message keys for future actions (reply/delete)
+                    key); // Store message keys for future actions (reply/delete)
                 });
 
                 // Step 2: Display grouped data in the table
@@ -313,6 +356,7 @@
             }
         }
 
+        // Fungsi untuk menampilkan notifikasi berdasarkan status URL
         function handleStatus() {
             const urlParams = new URLSearchParams(window.location.search);
             const status = urlParams.get('status');
@@ -326,6 +370,7 @@
             }
         }
 
+        // Memanggil loadData dan handleStatus saat halaman di-load
         window.onload = function() {
             loadData();
             handleStatus();

@@ -12,8 +12,8 @@
                         <div class="col-md-4">
                             <div class="form-floating">
                                 <input type="text" class="form-control datepicker-here" id="startDate" name="startDate"
-                                    placeholder="Tanggal Mulai" data-language='id' data-multiple-dates-separator=", "
-                                    data-date-format="dd MM yyyy" autocomplete="off">
+                                    placeholder="Tanggal Mulai" data-language='id' data-date-format="dd MM yyyy"
+                                    autocomplete="off">
                                 <label for="startDate">Tanggal Mulai</label>
                             </div>
                         </div>
@@ -21,8 +21,8 @@
                         <div class="col-md-4">
                             <div class="form-floating">
                                 <input type="text" class="form-control datepicker-here" id="endDate" name="endDate"
-                                    placeholder="Tanggal Akhir" data-language='id' data-multiple-dates-separator=", "
-                                    data-date-format="dd MM yyyy" autocomplete="off">
+                                    placeholder="Tanggal Akhir" data-language='id' data-date-format="dd MM yyyy"
+                                    autocomplete="off">
                                 <label for="endDate">Tanggal Akhir</label>
                             </div>
                         </div>
@@ -42,7 +42,7 @@
                                     <th>Tanggal Start</th>
                                     <th>Tanggal End</th>
                                     <th>Total Pesan Terkirim</th>
-                                    <th>Total Pesan DIterima</th>
+                                    <th>Total Pesan Diterima</th>
                                     <th>Cetak</th>
                                 </tr>
                             </thead>
@@ -85,12 +85,15 @@
                     return;
                 }
 
-                if (startDate && endDate) {
-                    window.location.href = "{{ url('/report') }}" + "?startDate=" + startDate +
-                        "&endDate=" + endDate;
-                } else {
+                // Validasi jika tanggal tidak diisi
+                if (!startDate || !endDate) {
                     alert('Tanggal mulai dan tanggal akhir harus diisi');
+                    return;
                 }
+
+                // Mengarahkan ke URL dengan parameter tanggal
+                window.location.href = "{{ url('/report') }}" + "?startDate=" + startDate + "&endDate=" +
+                    endDate;
             });
         });
     </script>
