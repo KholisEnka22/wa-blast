@@ -10,7 +10,7 @@ class CreateMessagesTable extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->string('img_url'); // Kolom untuk menyimpan URL gambar
+            $table->string('img'); // Kolom untuk menyimpan URL gambar
             $table->text('message'); // Kolom untuk menyimpan pesan
             $table->timestamps();
         });
