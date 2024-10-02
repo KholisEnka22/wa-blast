@@ -38,3 +38,4 @@ Route::get('/report', [ReportController::class, 'index'])->name('report.index');
 
 Route::get('/execute-curl', [NumberController::class, 'executeCurl'])->name('execute-curl');
 Route::get('/report', [ReportController::class, 'index'])->name('report.index');
+Route::get('/report/print', [ReportController::class, 'printReport'])->name('report.print');

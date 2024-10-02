@@ -12,8 +12,8 @@
                         <div class="col-md-4">
                             <div class="form-floating">
                                 <input type="text" class="form-control datepicker-here" id="startDate" name="startDate"
-                                    placeholder="Tanggal Mulai" data-language='id' data-date-format="dd MM yyyy"
-                                    autocomplete="off">
+                                    placeholder="Tanggal Mulai" data-language='id' data-multiple-dates-separator=", "
+                                    data-date-format="dd MM yyyy" autocomplete="off">
                                 <label for="startDate">Tanggal Mulai</label>
                             </div>
                         </div>
@@ -21,8 +21,8 @@
                         <div class="col-md-4">
                             <div class="form-floating">
                                 <input type="text" class="form-control datepicker-here" id="endDate" name="endDate"
-                                    placeholder="Tanggal Akhir" data-language='id' data-date-format="dd MM yyyy"
-                                    autocomplete="off">
+                                    placeholder="Tanggal Akhir" data-language='id' data-multiple-dates-separator=", "
+                                    data-date-format="dd MM yyyy" autocomplete="off">
                                 <label for="endDate">Tanggal Akhir</label>
                             </div>
                         </div>
@@ -47,24 +47,7 @@
                                 </tr>
                             </thead>
                             <tbody id="reportTableBody">
-                                @if ($countSent > 0)
-                                    <tr>
-                                        <td>{{ \Carbon\Carbon::parse($startDate)->format('d M Y') }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</td>
-                                        <td>{{ $countSent }}</td>
-                                        <td>{{ $countSend }}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary"
-                                                onclick="window.open(`{{ url('report/pdf', [$startDate, $endDate]) }}`, '_blank')">
-                                                <i class="bx bx-printer"></i> Cetak
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @else
-                                    <tr>
-                                        <td colspan="5" class="text-center">Tidak ada data yang ditemukan</td>
-                                    </tr>
-                                @endif
+                                <!-- Data akan ditambahkan melalui AJAX -->
                             </tbody>
                         </table>
                     </div>
@@ -72,7 +55,9 @@
             </div>
         </div>
     </div>
+@endsection
 
+@section('footer')
     <script>
         $(document).ready(function() {
             $('#btnFilter').click(function() {
@@ -85,16 +70,137 @@
                     return;
                 }
 
-                // Validasi jika tanggal tidak diisi
-                if (!startDate || !endDate) {
-                    alert('Tanggal mulai dan tanggal akhir harus diisi');
-                    return;
-                }
+                if (startDate && endDate) {
+                    // Konversi format tanggal dari 'dd MMMM yyyy' ke 'yyyy-mm-dd'
+                    var formattedStartDate = formatDate(startDate);
+                    var formattedEndDate = formatDate(endDate);
 
-                // Mengarahkan ke URL dengan parameter tanggal
-                window.location.href = "{{ url('/report') }}" + "?startDate=" + startDate + "&endDate=" +
-                    endDate;
+                    // Update URL tanpa memuat ulang halaman menggunakan tanggal yang diformat
+                    const newUrl =
+                        `{{ url('/report') }}?startDate=${encodeURIComponent(formattedStartDate)}&endDate=${encodeURIComponent(formattedEndDate)}`;
+                    window.history.pushState({
+                        path: newUrl
+                    }, '', newUrl); // Memperbarui URL di address bar
+
+                    // Menampilkan spinner loading
+                    $('#reportTableBody').html(`
+                <tr>
+                    <td colspan="5" class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </td>
+                </tr>
+            `);
+
+                    $.ajax({
+                        url: newUrl,
+                        type: "GET",
+                        success: function(response) {
+                            $('#reportTableBody').empty(); // Kosongkan tabel sebelumnya
+
+                            // Tambahkan baris baru ke tabel
+                            if (response.countSent > 0) {
+                                $('#reportTableBody').append(`
+                            <tr>
+                                <td>${formattedStartDate}</td>
+                                <td>${formattedEndDate}</td>
+                                <td>${response.countSent}</td>
+                                <td>${response.countSend}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" id="btnPrint">
+                                        <i class="bx bx-printer"></i> Cetak
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                            } else {
+                                $('#reportTableBody').append(`
+                            <tr>
+                                <td colspan="5" class="text-center">Tidak ada data yang ditemukan</td>
+                            </tr>
+                        `);
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error('Error fetching data:', xhr);
+                        }
+                    });
+                } else {
+                    alert('Tanggal mulai dan tanggal akhir harus diisi');
+                }
             });
+
+            function formatDate(dateStr) {
+                const months = {
+                    'Januari': '01',
+                    'Februari': '02',
+                    'Maret': '03',
+                    'April': '04',
+                    'Mei': '05',
+                    'Juni': '06',
+                    'Juli': '07',
+                    'Agustus': '08',
+                    'September': '09',
+                    'Oktober': '10',
+                    'November': '11',
+                    'Desember': '12'
+                };
+
+                const parts = dateStr.split(' ');
+                const day = parts[0].padStart(2, '0');
+                const month = months[parts[1]];
+                const year = parts[2];
+
+                return `${year}-${month}-${parseInt(day, 10)}`; // Menghasilkan format yyyy-mm-dd
+            }
+
+            // Event listener untuk tombol cetak
+            $(document).on('click', '#btnPrint', function() {
+                // Ambil nilai dari input tanggal
+                var startDate = $('#startDate').val();
+                var endDate = $('#endDate').val();
+
+                // Konversi format tanggal dari 'dd MMMM yyyy' ke 'yyyy-mm-dd'
+                var formattedStartDate = formatDate(startDate);
+                var formattedEndDate = formatDate(endDate);
+
+                if (formattedStartDate && formattedEndDate) {
+                    // Membuat URL cetak
+                    var printUrl =
+                        `{{ url('/report/print') }}?startDate=${encodeURIComponent(formattedStartDate)}&endDate=${encodeURIComponent(formattedEndDate)}`;
+
+                    // Buka PDF di jendela baru
+                    window.open(printUrl, '_blank'); // Membuka PDF di tab baru
+                } else {
+                    alert('Tanggal mulai dan tanggal akhir harus diisi');
+                }
+            });
+
+            // Fungsi untuk mengonversi format tanggal
+            function formatDate(dateStr) {
+                const months = {
+                    'Januari': '01',
+                    'Februari': '02',
+                    'Maret': '03',
+                    'April': '04',
+                    'Mei': '05',
+                    'Juni': '06',
+                    'Juli': '07',
+                    'Agustus': '08',
+                    'September': '09',
+                    'Oktober': '10',
+                    'November': '11',
+                    'Desember': '12'
+                };
+
+                const parts = dateStr.split(' ');
+                const day = parts[0].padStart(2, '0');
+                const month = months[parts[1]];
+                const year = parts[2];
+
+                return `${year}-${month}-${parseInt(day, 10)}`; // Menghasilkan format yyyy-mm-dd
+            }
         });
     </script>
 @endsection
