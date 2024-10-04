@@ -32,30 +32,26 @@
 
 <body>
     <h1>Laporan Pesan</h1>
-    <p>Rentang Tanggal: {{ $startDate }} sampai {{ $endDate }}</p>
-    <p>Jumlah Pesan Terkirim: {{ $totalMessagesSent }}</p>
-    <p>Jumlah Pesan Diterima: {{ $totalMessagesReceived }}</p>
+    <p>Total Tagihan: Rp {{ number_format($totalMessagesSent * 250, 0, ',', '.') }}</p>
 
     <table>
         <thead>
             <tr>
                 <th>Tanggal</th>
-                <th>Pengirim</th>
-                <th>Pesan</th>
-                <th>Sesi</th>
+                <th>Pesan Terkirim</th>
+                <th>Pesan Diterima</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($content as $message)
-                <tr>
-                    <td>{{ $message['create_at'] }}</td>
-                    <td>{{ $message['from'] }}</td>
-                    <td>{{ $message['message'] }}</td>
-                    <td>{{ $message['session'] }}</td>
-                </tr>
-            @endforeach
+            <tr>
+                <td>{{ $startDate }} - {{ $endDate }}</td>
+                <td>{{ $totalMessagesSent }}</td>
+                <td>{{ $totalMessagesReceived }}</td>
+            </tr>
         </tbody>
     </table>
+    <p style="text-align: right;">Pasuruan, {{ date('d F Y') }}<br>Kami,</p>
+    <p style="text-align: right;">Direktur WA BLAST</p>
 </body>
 
 </html>

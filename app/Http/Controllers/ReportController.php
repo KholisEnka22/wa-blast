@@ -98,6 +98,7 @@ class ReportController extends Controller
 
         // Ambil data laporan berdasarkan tanggal
         $data = $this->getAllMessages($startDateFormatted, $endDateFormatted);
+        $totalMessagesSent = $this->countSentMessages($startDateFormatted, $endDateFormatted);
 
         // Pastikan data tidak kosong
         if (empty($data)) {
@@ -105,7 +106,6 @@ class ReportController extends Controller
         }
 
         // Hitung jumlah pesan terkirim dan diterima
-        $totalMessagesSent = count($data);
         $totalMessagesReceived = count(array_filter($data, function ($item) {
             return !empty($item['message']); // Hanya menghitung pesan yang memiliki konten
         }));
@@ -149,5 +149,4 @@ class ReportController extends Controller
 
         return $filteredData; // Mengembalikan pesan yang difilter
     }
-
 }
