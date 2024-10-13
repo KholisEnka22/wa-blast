@@ -72,15 +72,13 @@ class NumberController extends Controller
         ->get();
 
         $server = DB::table('servers')->where('servers.status', 'active')
-        ->value('server');
-        $serverCount = DB::table('servers')->where('servers.status', 'active')
-        ->value('count');
-
-        
+        ->value('server');       
         
         // dd($server);
 
     foreach ($numbers as $item) {
+        $serverCount = DB::table('servers')->where('servers.status', 'active')
+        ->value('count');
         $ch = curl_init();
 
         // Bersihkan dan format pesan dari HTML ke plain text dengan format Markdown
