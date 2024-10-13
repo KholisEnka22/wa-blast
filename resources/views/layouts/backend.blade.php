@@ -116,10 +116,10 @@
                             <div data-i18n="Report">Report</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ request()->is('inbox*') ? 'active' : '' }}">
-                        <a href="{{ route('inbox.index') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-target-lock"></i>
-                            <div data-i18n="Whatsapp">Auto Reply</div>
+                    <li class="menu-item {{ request()->is('setting*') ? 'active' : '' }}">
+                        <a href="{{ route('setting.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-cog"></i>
+                            <div data-i18n="Setting">Setting</div>
                         </a>
                     </li>
                 </ul>

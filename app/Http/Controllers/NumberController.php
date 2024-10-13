@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use App\Models\Number;
+use App\Models\Server;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -61,66 +62,6 @@ class NumberController extends Controller
             ->with('message.content', 'Data berhasil ditambah.');
     }
 
-    // public function executeCurl()
-    // {
-    //     $numbers = DB::table('numbers')
-    //         ->join('messages', 'numbers.message_id', '=', 'messages.id')  // Join ke tabel messages
-    //         ->where('numbers.status', 'belum terkirim')  // Kondisi 'belum terkirim'
-    //         ->select('numbers.*', 'messages.img', 'messages.message as message_text')  // Pilih semua kolom dari numbers dan pesan dari messages
-    //         ->get();
-
-    //     foreach ($numbers as $item) {
-
-    //         $ch = curl_init();
-
-    //         curl_setopt($ch, CURLOPT_URL, 'http://147.139.201.32:60000/send-image');
-    //         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    //         curl_setopt($ch, CURLOPT_POST, 1);
-    //         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-    //             'to' => $item->number,
-    //             'text' => $item->message_text,
-    //             'imageUrl' => $item->img,
-    //         ]));
-
-    //         $headers = array();
-    //         $headers[] = 'Accept: */*';
-    //         $headers[] = 'User-Agent: Thunder Client (https://www.thunderclient.com)';
-    //         $headers[] = 'Content-Type: application/json';
-    //         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-    //         $result = curl_exec($ch);
-    //         $err = curl_errno($ch);
-    //         curl_close($ch);
-
-    //         // echo "Result: " . $result . "\n"; // Print result
-    //         // jika pengiriman gagal maka dianggap nomor tidak valid 
-
-    //         $response = json_decode($result, true);
-    //         if (isset($response['error']) && $response['error'] === 'Failed to send message') {
-    //             // Log error atau tangani sesuai kebutuhan
-    //             Log::error('cURL Error #: ' . $response['error']);
-    //             DB::table('numbers')
-    //                 ->where('id',  $item->id)
-    //                 ->update(['status' => 'number not registered']);
-    //             // jika repon dari api server "Message sent with session" maka nomro valid dan sudah terkirim
-    //         } else if (isset($response['message']) && preg_match('/Message sent with session/', $response['message'])) {
-    //             // Log atau tangani response sesuai kebutuhan
-    //             Log::info('cURL Response: ' . $result);
-    //             DB::table('numbers')
-    //                 ->where('id',  $item->id)
-    //                 ->update(['status' => 'terkirim']);
-    //             // jika respon ga ada maka session habis dan menjadi status belum di kirim
-    //         } else {
-    //             // Log atau tangani response sesuai kebutuhan
-    //             Log::info('cURL Response: ' . $result);
-    //             DB::table('numbers')
-    //                 ->where('id',  $item->id)
-    //                 ->update(['status' => 'belum terkirim']);
-    //         }
-    //     }
-
-    //     return response()->json($numbers);
-    // }
 
     public function executeCurl()
     {
@@ -129,6 +70,15 @@ class NumberController extends Controller
         ->where('numbers.status', 'belum terkirim')
         ->select('numbers.*', 'messages.img', 'messages.message as message_text')
         ->get();
+
+        $server = DB::table('servers')->where('servers.status', 'active')
+        ->value('server');
+        $serverCount = DB::table('servers')->where('servers.status', 'active')
+        ->value('count');
+
+        
+        
+        // dd($server);
 
     foreach ($numbers as $item) {
         $ch = curl_init();
@@ -142,7 +92,7 @@ class NumberController extends Controller
         // Hapus tag HTML lain (jika ada tag HTML selain <p>)
         $clean_message = strip_tags($message_with_newlines);
 
-        curl_setopt($ch, CURLOPT_URL, 'http://147.139.201.32:60000/send-image');
+        curl_setopt($ch, CURLOPT_URL, 'http://'.$server.'/send-image');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
@@ -193,6 +143,8 @@ class NumberController extends Controller
                     ->update(['status' => 'number not registered']);
             } else if (isset($response['message']) && preg_match('/Message sent/', $response['message'])) {
                 // Jika pesan berhasil dikirim
+                DB::table('servers')->where('servers.status', 'active')
+            ->update(['count' => $serverCount + 1]);
                 DB::table('numbers')
                     ->where('id', $item->id)
                     ->update(['status' => 'terkirim']);

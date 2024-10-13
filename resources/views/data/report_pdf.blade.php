@@ -50,7 +50,10 @@
             </tr>
         </tbody>
     </table>
-    <p style="text-align: right;">Pasuruan, {{ date('d F Y') }}<br>Kami,</p>
+    <p style="text-align: right;">Pasuruan, {{ date('d F Y') }}</p>
+    <br>
+    <p>Kami,</p>
+    <br>
     <p style="text-align: right;">Direktur WA BLAST</p>
 </body>
 
