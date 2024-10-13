@@ -14,13 +14,6 @@
 
     @yield('top')
 
-    <!-- Summernote -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- include summernote css/js -->
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-
-
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('template/templateAdmin') }}/assets/img/sa.png" />
 
@@ -144,9 +137,7 @@
                         </a>
                     </div>
                     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                        <!-- Search -->
 
-                        <!-- /Search -->
                         <marquee behavior="scroll" direction="left" scrollamount="3" scrolldelay="5"
                             onmouseover="this.stop()" onmouseout="this.start()">
                             Hubungi kami untuk jasa layanan whatsapp blast, promo whatsapp blast, WA blast, whatsapp
@@ -154,15 +145,53 @@
                                 href="https://wa.me/6281554850403" target="_blank">Klik disini</a> untuk menghubungi
                             kami.
                         </marquee>
-                        <ul class="navbar-nav flex-row align-items-center ms-auto">
-                            <!-- User -->
-                            {{-- <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                         
-                           
-                    </li> --}}
-                        </ul>
 
-                        <!--/ User -->
+                        <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+                            <!-- User -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle hide-arrow" href="#" id="navbarDropdown"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="avatar avatar-online">
+                                        <img src="{{ asset('template/templateAdmin/assets/img/avatars/Mark.png') }}"
+                                            alt="Default Avatar" class="w-px-40 h-auto rounded-circle" />
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar avatar-online">
+                                                        <img src="{{ asset('template/templateAdmin/assets/img/avatars/Mark.png') }}"
+                                                            alt="Default Avatar"
+                                                            class="w-px-40 h-auto rounded-circle" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <span class="fw-semibold d-block">maruji</span>
+                                                    <small class="text-muted">Admin</small>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"><i class="bx bx-user me-2"></i> My
+                                            Profile</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bx bx-cog me-2"></i>
+                                            Settings</a></li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('logout') }}"><i
+                                                class="bx bx-power-off me-2"></i>
+                                            Log Out</a></li>
+                                </ul>
+                            </li>
+
+                            <!--/ User -->
                         </ul>
                     </div>
                 </nav>
@@ -210,6 +239,8 @@
     <!-- / Layout wrapper -->
 
     <!-- Core JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- build:js assets/vendor/js/core.js -->
     <script src="{{ asset('template/templateAdmin') }}/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="{{ asset('template/templateAdmin') }}/assets/vendor/libs/popper/popper.js"></script>
