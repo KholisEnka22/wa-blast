@@ -30,7 +30,9 @@ Route::get('/number', [NumberController::class, 'index'])->name('number.index');
 Route::post('/store/number', [NumberController::class, 'store'])->name('number.store');
 
 Route::get('/inbox', [InboxController::class, 'index'])->name('inbox.index');
+Route::get('/message', [MessageController::class, 'index'])->name('message.index');
 Route::post('/store/message', [MessageController::class, 'store'])->name('message.store');
+Route::delete('/delete/message/{id}', [MessageController::class, 'destroy'])->name('message.destroy');
 
 Route::get('/reply-chat', [ReplyChatController::class, 'store'])->name('reply-chat.store');
 Route::get('/reply-chat/{from}', [ReplyChatController::class, 'detail'])->name('reply-chat.detail');

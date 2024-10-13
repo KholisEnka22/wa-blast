@@ -104,9 +104,15 @@
                             <div data-i18n="Blast Message">Blast Message</div>
                         </a>
                     </li>
+                    <li class="menu-item {{ request()->is('message*') ? 'active' : '' }}">
+                        <a href="{{ route('message.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-message-square-detail"></i>
+                            <div data-i18n="Blast Message">Message</div>
+                        </a>
+                    </li>
                     <li class="menu-item {{ request()->is('inbox*') ? 'active' : '' }}">
                         <a href="{{ route('inbox.index') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-message-rounded-dots"></i>
+                            <i class="menu-icon tf-icons bx bx-chat"></i>
                             <div data-i18n="Inbox">Inbox</div>
                         </a>
                     </li>

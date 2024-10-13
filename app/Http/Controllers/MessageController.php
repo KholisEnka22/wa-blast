@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
+    public function index()
+    {
+        $data = [
+            'title' => 'Message',
+            'pesan' => Message::all()
+        ];
+        return view('data.message', $data);
+    }
+
     public function store(Request $request)
     {
         // Validasi input
@@ -29,8 +38,17 @@ class MessageController extends Controller
         ]);
 
         // Redirect ke halaman inbox dengan pesan sukses
-        return redirect()->route('number.index')
+        return redirect()->route('message.index')
             ->with('message.type', 'success')
             ->with('message.content', 'Data berhasil ditambah.');
+    }
+
+    public function destroy($id)
+    {
+        Message::findOrFail($id)->delete();
+        return redirect()->back()
+            ->with('message.type', 'success')
+            ->with('message.content', 'Data berhasil dihapus.');
+
     }
 }

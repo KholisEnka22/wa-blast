@@ -59,7 +59,7 @@ class NumberController extends Controller
 
         // Redirect dengan pesan sukses
         return redirect()->back()->with('message.type', 'success')
-            ->with('message.content', 'Data berhasil ditambah.');
+            ->with('message.content', 'Pesan dalam proses pengiriman.');
     }
 
 
@@ -86,6 +86,17 @@ class NumberController extends Controller
 
         // Ganti tag <p> dengan baris baru (\n)
         $message_with_newlines = str_replace(['<p>', '</p>'], ['', "\n"], $formattedMessage);
+
+        // Format teks yang ada di dalam tag <i> agar sesuai dengan format Markdown
+        $message_with_newlines = preg_replace('/<i>(.*?)<\/i>/', '*$1*', $message_with_newlines);
+
+        // Format teks yang ada di dalam tag <b> agar sesuai dengan format Markdown
+        $message_with_newlines = preg_replace('/<b>(.*?)<\/b>/', '*$1*', $message_with_newlines);
+
+        // Format teks yang ada di dalam tag <u> agar sesuai dengan format Markdown
+        $message_with_newlines = preg_replace('/<u>(.*?)<\/u>/', '__$1__', $message_with_newlines);
+
+        // Format teks yang ada di dalam tag 
 
         // Hapus tag HTML lain (jika ada tag HTML selain <p>)
         $clean_message = strip_tags($message_with_newlines);

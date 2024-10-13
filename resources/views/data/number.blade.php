@@ -30,10 +30,6 @@
                 data-bs-placement="right" data-bs-html="true" title="<span>Kirim Pesan Massal</span>">
                 <span class="tf-icons bx bxs-paper-plane"></span>
             </button>
-            <button id="pesan" class="btn btn-icon btn-primary ms-2" data-bs-toggle="tooltip" data-bs-offset="0,4"
-                data-bs-placement="right" data-bs-html="true" title="<span>Tambahkan Pesan</span>">
-                <span class="tf-icons bx bx-plus-medical"></span>
-            </button>
         </div>
 
         <div class="table-responsive text-nowrap">
@@ -54,10 +50,20 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->number }}</td>
                             <td>
-                                <img src="{{ $item->message->img }}" alt="Gambar Pesan"
-                                    style="max-width: 60px; height: auto;">
+                                @if ($item->message)
+                                    <img src="{{ $item->message->img }}" alt="Gambar Pesan"
+                                        style="max-width: 90px; height: 90px;">
+                                @else
+                                    <span>Messsage sudah dihapus</span>
+                                @endif
                             </td>
-                            <td>{{ \Illuminate\Support\Str::limit(strip_tags($item->message->message), 25, '...') }}</td>
+                            <td>
+                                @if ($item->message)
+                                    {{ \Illuminate\Support\Str::limit(strip_tags($item->message->message), 25, '...') }}
+                                @else
+                                    <span>Messsage sudah dihapus</span>
+                                @endif
+                            </td>
 
                             <td>{{ $item->created_at }}</td>
                             <td>
@@ -163,91 +169,47 @@
         </div>
     </div>
 
-    <!-- modal tambah pesan -->
-    <div class="modal fade" id="pesanModal" tabindex="-1" aria-labelledby="pesanModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">Isi Pesan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('message.store') }}" method="POST">
-                        @csrf
+@endsection
 
-                        <div class="form-group">
-                            <label for="message">Message:</label>
-                            <textarea id="summernote" name="message" placeholder="Tulis pesan disini" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="img_url">Image URL:</label>
-                            <input type="text" class="form-control" id="img_url" name="img_url"
-                                placeholder="https://example.com/image.jpg" required oninput="loadImage(this.value)">
-                        </div>
+@section('footer')
+    <script>
+        $(document).ready(function() {
+            var message = @json(session('message'));
 
-                        <div class="form-group">
-                            <img src="" id="imgPreview" style="max-width: 200px; height: auto;" />
-                        </div>
+            if (typeof message === 'object' && message !== null) {
+                var messageType = message.type;
+                var messageContent = message.content;
 
-                        <script>
-                            function loadImage(url) {
-                                var img = document.getElementById('imgPreview');
-                                img.src = url;
-                            }
-                        </script>
-                        <br>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        {{-- End Modal --}}
-    @endsection
+                if (messageType === 'success' || messageType === 'danger') {
+                    $('#modalMessageToast .fw-semibold').text(messageType.charAt(0).toUpperCase() + messageType
+                        .slice(1));
+                    $('#modalMessageToast .toast-body').text(messageContent);
 
-    @section('footer')
-        <script>
-            $(document).ready(function() {
-                var message = @json(session('message'));
-
-                if (typeof message === 'object' && message !== null) {
-                    var messageType = message.type;
-                    var messageContent = message.content;
-
-                    if (messageType === 'success' || messageType === 'danger') {
-                        $('#modalMessageToast .fw-semibold').text(messageType.charAt(0).toUpperCase() + messageType
-                            .slice(1));
-                        $('#modalMessageToast .toast-body').text(messageContent);
-
-                        $('#modalMessageToast').toast('show');
-                    }
+                    $('#modalMessageToast').toast('show');
                 }
-            });
-        </script>
+            }
+        });
+    </script>
 
-        <script>
-            document.getElementById('myButton').addEventListener('click', function() {
-                var tooltip = new bootstrap.Tooltip(this); // Aktifkan tooltip manual
-                var modal = new bootstrap.Modal(document.getElementById('basicModal')); // Aktifkan modal manual
-                modal.show();
-            });
-            document.getElementById('pesan').addEventListener('click', function() {
-                var tooltip = new bootstrap.Tooltip(this); // Aktifkan tooltip manual
-                var modal = new bootstrap.Modal(document.getElementById('pesanModal')); // Aktifkan modal manual
-                modal.show();
-            });
-        </script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                fetch('/execute-curl')
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            console.log('cURL executed successfully');
-                        } else {
-                            console.error('cURL execution failed');
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            });
-        </script>
-    @endsection
+    <script>
+        document.getElementById('myButton').addEventListener('click', function() {
+            var tooltip = new bootstrap.Tooltip(this); // Aktifkan tooltip manual
+            var modal = new bootstrap.Modal(document.getElementById('basicModal')); // Aktifkan modal manual
+            modal.show();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/execute-curl')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log('cURL executed successfully');
+                    } else {
+                        console.error('cURL execution failed');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+@endsection
