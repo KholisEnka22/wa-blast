@@ -23,8 +23,9 @@ class NumberController extends Controller
         // Simpan ke array data yang akan dikirim ke view
         $data = [
             'title' => 'Number',
-            'number' => Number::paginate(10), // Pagination untuk numbers
+            'number' => Number::orderBy('id', 'DESC')->paginate(10), // Pagination untuk numbers
             'message' => $messages, // Short message disimpan
+            'pandding' => \App\Models\Number::whereStatus('belum terkirim')->count(),
         ];
 
         return view('data.number', $data);
@@ -66,49 +67,49 @@ class NumberController extends Controller
     public function executeCurl()
     {
         $numbers = DB::table('numbers')
-        ->join('messages', 'numbers.message_id', '=', 'messages.id')
-        ->where('numbers.status', 'belum terkirim')
-        ->select('numbers.*', 'messages.img', 'messages.message as message_text')
-        ->get();
+            ->join('messages', 'numbers.message_id', '=', 'messages.id')
+            ->where('numbers.status', 'belum terkirim')
+            ->select('numbers.*', 'messages.img', 'messages.message as message_text')
+            ->get();
 
         $server = DB::table('servers')->where('servers.status', 'active')
-        ->value('server');       
-        
+            ->value('server');
+
         // dd($server);
 
-    foreach ($numbers as $item) {
-        $serverCount = DB::table('servers')->where('servers.status', 'active')
-        ->value('count');
-        $ch = curl_init();
+        foreach ($numbers as $item) {
+            $serverCount = DB::table('servers')->where('servers.status', 'active')
+                ->value('count');
+            $ch = curl_init();
 
-        // Bersihkan dan format pesan dari HTML ke plain text dengan format Markdown
-        $formattedMessage = $item->message_text;
+            // Bersihkan dan format pesan dari HTML ke plain text dengan format Markdown
+            $formattedMessage = $item->message_text;
 
-        // Ganti tag <p> dengan baris baru (\n)
-        $message_with_newlines = str_replace(['<p>', '</p>'], ['', "\n"], $formattedMessage);
+            // Ganti tag <p> dengan baris baru (\n)
+            $message_with_newlines = str_replace(['<p>', '</p>'], ['', "\n"], $formattedMessage);
 
-        // Format teks yang ada di dalam tag <i> agar sesuai dengan format Markdown
-        $message_with_newlines = preg_replace('/<i>(.*?)<\/i>/', '*$1*', $message_with_newlines);
+            // Format teks yang ada di dalam tag <i> agar sesuai dengan format Markdown
+            $message_with_newlines = preg_replace('/<i>(.*?)<\/i>/', '*$1*', $message_with_newlines);
 
-        // Format teks yang ada di dalam tag <b> agar sesuai dengan format Markdown
-        $message_with_newlines = preg_replace('/<b>(.*?)<\/b>/', '*$1*', $message_with_newlines);
+            // Format teks yang ada di dalam tag <b> agar sesuai dengan format Markdown
+            $message_with_newlines = preg_replace('/<b>(.*?)<\/b>/', '*$1*', $message_with_newlines);
 
-        // Format teks yang ada di dalam tag <u> agar sesuai dengan format Markdown
-        $message_with_newlines = preg_replace('/<u>(.*?)<\/u>/', '__$1__', $message_with_newlines);
+            // Format teks yang ada di dalam tag <u> agar sesuai dengan format Markdown
+            $message_with_newlines = preg_replace('/<u>(.*?)<\/u>/', '__$1__', $message_with_newlines);
 
-        // Format teks yang ada di dalam tag 
+            // Format teks yang ada di dalam tag 
 
-        // Hapus tag HTML lain (jika ada tag HTML selain <p>)
-        $clean_message = strip_tags($message_with_newlines);
+            // Hapus tag HTML lain (jika ada tag HTML selain <p>)
+            $clean_message = strip_tags($message_with_newlines);
 
-        curl_setopt($ch, CURLOPT_URL, 'http://'.$server.'/send-image');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-            'to' => $item->number,
-            'text' => $clean_message,  // Kirim pesan yang sudah diformat
-            'imageUrl' => $item->img,
-        ]));
+            curl_setopt($ch, CURLOPT_URL, 'http://' . $server . '/send-image');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+                'to' => $item->number,
+                'text' => $clean_message,  // Kirim pesan yang sudah diformat
+                'imageUrl' => $item->img,
+            ]));
 
             $headers = array();
             $headers[] = 'Accept: */*';
@@ -153,7 +154,7 @@ class NumberController extends Controller
             } else if (isset($response['message']) && preg_match('/Message sent/', $response['message'])) {
                 // Jika pesan berhasil dikirim
                 DB::table('servers')->where('servers.status', 'active')
-            ->update(['count' => $serverCount + 1]);
+                    ->update(['count' => $serverCount + 1]);
                 DB::table('numbers')
                     ->where('id', $item->id)
                     ->update(['status' => 'terkirim']);
@@ -171,5 +172,4 @@ class NumberController extends Controller
 
         return response()->json($numbers);
     }
-
 }

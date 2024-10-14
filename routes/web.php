@@ -8,6 +8,7 @@ use App\Http\Controllers\NumberController;
 use App\Http\Controllers\ReplyChatController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\DataController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,9 +26,9 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::get('/login',[LoginController::class, 'login'])->name('login');
-Route::post('/postlogin',[LoginController::class, 'postlogin'])->name('postlogin');
-Route::get('/logout',[LoginController::class, 'logout'])->name('logout');
+Route::get('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/postlogin', [LoginController::class, 'postlogin'])->name('postlogin');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'checkRole:admin,user'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
